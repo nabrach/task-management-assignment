@@ -22,13 +22,29 @@ A full-stack task management application built with Angular frontend and NestJS 
 
 1. **Clone the repository**
    ```bash
+   # Replace <repository-url> with your actual repository URL
    git clone <repository-url>
-   cd mockTurboVets
+   
+   # Navigate into the project directory
+   cd task-management-assignment
+   
+   # Verify you're in the correct directory (should contain apps/, libs/, package.json)
+   ls
    ```
 
 2. **Install dependencies**
    ```bash
+   # Install root dependencies
    npm install
+   
+   # Install API dependencies
+   cd apps/api && npm install
+   
+   # Install dashboard dependencies
+   cd ../dashboard && npm install
+   
+   # Return to root
+   cd ../..
    ```
 
 ### Backend Setup (NestJS API)
@@ -104,22 +120,23 @@ cd apps/dashboard && npm start
 This project uses NX monorepo architecture to manage multiple applications and shared libraries efficiently:
 
 ```
-mockTurboVets/
+task-management-assignment/
 ├── apps/
 │   ├── api/           # NestJS backend application
 │   └── dashboard/     # Angular frontend application
 ├── libs/
-│   ├── auth/          # Shared authentication library
 │   └── data/          # Shared data models and interfaces
-├── dist/              # Build outputs
+├── nx.json            # NX configuration
+├── package.json       # Root workspace configuration
 └── node_modules/      # Shared dependencies
 ```
 
 **Benefits of NX Monorepo:**
-- **Code Sharing**: Common interfaces and utilities shared between frontend and backend
-- **Consistent Dependencies**: Single package.json manages all dependencies
-- **Build Optimization**: NX provides intelligent build caching and dependency graphs
-- **Developer Experience**: Unified tooling and consistent development workflow
+- **Code Sharing**: Common interfaces and DTOs shared between frontend and backend via `@my-workspace/data`
+- **Workspace Management**: NX manages the monorepo structure and provides build tools
+- **Library Integration**: The dashboard app imports from the shared data library using `"@my-workspace/data": "file:../../libs/data"`
+- **Independent Apps**: Each app (API and dashboard) has its own package.json with specific dependencies
+- **Unified Development**: Single repository for both frontend and backend development
 
 ### Technology Stack
 
@@ -137,8 +154,10 @@ mockTurboVets/
 - Forms: Reactive Forms
 
 **Shared Libraries:**
-- `@my-workspace/data`: TypeScript interfaces and DTOs
-- `@my-workspace/auth`: Authentication utilities
+- `@my-workspace/data`: TypeScript interfaces and DTOs for tasks, users, organizations, and audit logs
+  - Located in `libs/data/src/lib/`
+  - Exported through `libs/data/src/index.ts`
+  - Imported in dashboard app via `"@my-workspace/data": "file:../../libs/data"`
 
 ## Data Model
 
@@ -465,6 +484,22 @@ interface CustomRole {
 - Data encryption at rest
 
 **Note**: SQLite is ideal for local development but production deployments should migrate to a more robust database system like PostgreSQL or MySQL for better performance, concurrent access, and scalability.
+
+## Quick Start
+
+For a faster setup experience, you can also use the following commands from the root directory:
+
+```bash
+# Install all dependencies (both frontend and backend)
+npm install
+
+# Start both applications in parallel
+npm run dev
+
+# Or start them individually:
+npm run start:api      # Start backend only
+npm run start:dashboard # Start frontend only
+```
 
 ---
 

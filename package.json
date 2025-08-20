@@ -9,9 +9,19 @@
   "devDependencies": {
     "nx": "21.4.0"
   },
+  "scripts": {
+    "dev": "concurrently \"npm run start:api\" \"npm run start:dashboard\"",
+    "start:api": "cd apps/api && npm run start:dev",
+    "start:dashboard": "cd apps/dashboard && npm start",
+    "install:all": "npm install && cd apps/api && npm install && cd ../dashboard && npm install"
+  },
   "dependencies": {
     "@nestjs/typeorm": "^11.0.0",
     "sqlite3": "^5.1.7",
     "typeorm": "^0.3.25"
+  },
+  "devDependencies": {
+    "nx": "21.4.0",
+    "concurrently": "^8.2.2"
   }
 }
